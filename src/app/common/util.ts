@@ -7,6 +7,7 @@ export function createHttpObservable(url:string) {
 
       fetch(url, {signal}).then(
         response => {
+          console.log(response.status);
           return response.json();
         }
       ).then(
@@ -15,6 +16,7 @@ export function createHttpObservable(url:string) {
           observer.complete();
         }
       ).catch(err => {
+        console.error(err);
         observer.error(err);
       })
 
