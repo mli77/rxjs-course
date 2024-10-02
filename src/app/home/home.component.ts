@@ -23,6 +23,27 @@ export class HomeComponent implements OnInit {
 
         const https$ = createHttpObservable('/api/courses');
         const courses$: Observable<Course[]> = https$.pipe(
+            tap(() => console.log("Http request executed")),
+            map(resp => Object.values(resp['payload'])),
+            shareReplay(), 
+            retryWhen(errors => errors.pipe(
+                delayWhen(() => timer(2000))
+            ))
+        )
+    
+        this.beginnerCourses$ = courses$.pipe(
+            map(courses => courses.filter(course => course.category == 'BEGINNER'))
+        );
+        this.advancedCourses$ = courses$.pipe(
+            map(courses => courses.filter(course => course.category == 'ADVANCED'))
+        );
+
+    }
+
+    ngOnInit_rethrow() {
+
+        const https$ = createHttpObservable('/api/courses');
+        const courses$: Observable<Course[]> = https$.pipe(
             catchError(err => {
                 console.log("Error occured", err);
                 return throwError(err);
