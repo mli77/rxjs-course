@@ -26,8 +26,22 @@ import {createHttpObservable} from '../common/util';
 export class AboutComponent implements OnInit {
 
     ngOnInit() {
+        const subject = new BehaviorSubject(0);
 
+        const series$ = subject.asObservable();
 
+        series$.subscribe(val => console.log("Early subscription: " + val));
+
+        subject.next(1);
+        subject.next(2);
+        subject.next(3);
+        subject.next(4);
+
+        //subject.complete();
+        setTimeout(() => {
+            series$.subscribe(val => console.log("Late subscription: " + val));
+            subject.next(5);
+        }, 3000);
     }
 
 
