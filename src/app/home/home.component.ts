@@ -18,13 +18,13 @@ export class HomeComponent implements OnInit {
     advancedCourses$: Observable<Course[]>;
 
 
-    constructor(private store:Store) {
+    constructor(private store:Store) { // INJECTION DU STORE
 
     }
 
     ngOnInit() {
 
-        const courses$ = this.store.courses$;
+        const courses$ = this.store.courses$;   // Utilisation du store
 
         this.beginnerCourses$ = this.store.selectBeginnerCourses();
 
